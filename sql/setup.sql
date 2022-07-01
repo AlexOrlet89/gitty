@@ -12,6 +12,10 @@ CREATE TABLE github_users (
 );
 CREATE TABLE geets (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  user_id BIGINT ,
-  geet VARCHAR
+  title VARCHAR,
+  description VARCHAR(255)
 );
+
+Insert Into geets (title, description) Values 
+  ('one', 'two'),
+  ('one', 'two')
