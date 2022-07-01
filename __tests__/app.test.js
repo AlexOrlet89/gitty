@@ -17,7 +17,7 @@ describe('user testing', () => {
   beforeEach(() => {
     return setup(pool);
   });
-  it.skip('should redirect to the github oauth page on login', async () => {
+  it('should redirect to the github oauth page on login', async () => {
     const res = await request(app).get('/api/v1/github/login');
     expect(res.header.location).toMatch(
       /https:\/\/github.com\/login\/oauth\/authorize\?client_id=[\w\d]+&scope=user&redirect_uri=http:\/\/localhost:7890\/api\/v1\/github\/login\/callback/i
@@ -65,7 +65,7 @@ describe('user testing', () => {
     expect(response.status).toBe(200);
   });
 
-  it.only('DELETE /sessions should sign out a user', async () => {
+  it('DELETE /sessions should sign out a user', async () => {
     const user = await registerAndLogin();
     const resp = await user.delete('/api/v1/github/sessions');
     expect(resp.status).toBe(204);
