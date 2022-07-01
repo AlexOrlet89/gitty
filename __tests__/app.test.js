@@ -2,7 +2,6 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
-const Post = require('../lib/models/Post');
 
 jest.mock('../lib/services/githubServices');
 
@@ -57,13 +56,19 @@ describe('user testing', () => {
     expect(posts.status).toBe(200);
   });
 
-  it.only('authenticated users can post', async () => {
+  it('authenticated users can post', async () => {
     const user = await registerAndLogin();
     const response = await user.post('/api/v1/posts').send({
       title: 'new',
       description: 'new',
     });
     expect(response.status).toBe(200);
+  });
+
+  it.only('DELETE /sessions should sign out a user', async () => {
+    const user = await registerAndLogin();
+    const resp = await user.delete('/api/v1/github/sessions');
+    expect(resp.status).toBe(204);
   });
   afterAll(() => {
     pool.end();
