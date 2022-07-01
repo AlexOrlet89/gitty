@@ -20,12 +20,32 @@ describe('user testing', () => {
       .agent(app)
       .get('/api/v1/github/login/callback?code=1')
       .redirects(1);
-    console.log(res.status, res.body);
+    expect(res.body).toEqual({
+      id: '1',
+      email: 'fake@gmail.com',
+      username: 'fake',
+      iat: expect.any(Number),
+      exp: expect.any(Number),
+    });
   });
-  it.only('authenticated users can view geets', async () => {
+  it('authenticated users can view geets', async () => {
     const res = await request(app).get('/api/v1/posts');
-    expect(res.status).toBe(200);
-    //needs a 403 after this...
+    expect(res.status).toBe(401);
+    //log in a user...
+    const user = await request
+      .agent(app)
+      .get('/api/v1/github/login/callback?code=1')
+      .redirects(1);
+    expect(user.body).toEqual({
+      id: '1',
+      email: 'fake@gmail.com',
+      username: 'fake',
+      iat: expect.any(Number),
+      exp: expect.any(Number),
+    });
+    //try and access posts
+    const posts = await request(app).get('/api/v1/posts');
+    expect(posts.status).toBe(200);
   });
   afterAll(() => {
     pool.end();
