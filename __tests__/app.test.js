@@ -15,6 +15,13 @@ describe('user testing', () => {
       /https:\/\/github.com\/login\/oauth\/authorize\?client_id=[\w\d]+&scope=user&redirect_uri=http:\/\/localhost:7890\/api\/v1\/github\/login\/callback/i
     );
   });
+  it.only('mock user should log in using their github account', async () => {
+    const res = await request
+      .agent(app)
+      .get('/api/v1/github/login/callback?code=1')
+      .redirects(1);
+    console.log(res.status, res.body);
+  });
   afterAll(() => {
     pool.end();
   });
